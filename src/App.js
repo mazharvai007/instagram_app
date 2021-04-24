@@ -1,28 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Post from './Components/Post/Post';
+import { db } from './firebase';
 
 function App() {
-	const [posts, setPosts] = useState([
-		{
-			username: 'John Doe',
-			caption: 'Great! It works.',
-			imageURL:
-				'https://images.unsplash.com/photo-1501163268664-3fdf329d019f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-		},
-		{
-			username: 'Jane Doe',
-			caption: 'Nice picture',
-			imageURL:
-				'https://images.unsplash.com/photo-1585399000684-d2f72660f092?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1951&q=80',
-		},
-		{
-			username: 'Ahmed Abdullah',
-			caption: 'Excellent work',
-			imageURL:
-				'https://images.unsplash.com/photo-1585398999889-2fea45c6cc11?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1951&q=80',
-		},
-	]);
+	const [posts, setPosts] = useState([]);
+
+	useEffect(() => {
+		db.collection('posts').onSnapshot((snapshot) => {
+			// Added new post everytime when the is fire
+			setPosts(
+				snapshot.docs.map((doc) => ({
+					id: doc.id,
+					post: doc.data(),
+				}))
+			);
+		});
+	}, []);
 
 	return (
 		<div className='App'>
@@ -34,29 +28,15 @@ function App() {
 				/>
 			</div>
 
-			{posts.map((post) => (
+			{posts.map(({ id, post }) => (
 				<Post
+					key={id}
 					username={post.username}
 					caption={post.caption}
 					imageURL={post.imageURL}
 				/>
 			))}
 
-			{/* <Post
-				username='John Doe'
-				caption='Great! It works.'
-				imageURL='https://images.unsplash.com/photo-1501163268664-3fdf329d019f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'
-			/>
-			<Post
-				username='Jane Doe'
-				caption='Nice picture'
-				imageURL='https://images.unsplash.com/photo-1585399000684-d2f72660f092?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1951&q=80'
-			/>
-			<Post
-				username='Ahmed Abdullah'
-				caption='Excellent work'
-				imageURL='https://images.unsplash.com/photo-1585398999889-2fea45c6cc11?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1951&q=80'
-			/> */}
 			{/* right content */}
 		</div>
 	);
