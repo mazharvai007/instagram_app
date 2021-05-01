@@ -5,6 +5,7 @@ import './App.css';
 import Post from './Components/Post/Post';
 import { db, auth } from './firebase';
 import { Button, FormControl, Input } from '@material-ui/core';
+import ImageUpload from './Components/ImageUpload/ImageUpload';
 
 function getModalStyle() {
 	const top = 50;
@@ -41,14 +42,13 @@ function App() {
 	const [user, setUser] = useState(null);
 
 	/**
-	 * Users
+	 * Users Authentication
 	 */
 	useEffect(() => {
 		// Get the currently signed-in user
 		const unsubscribe = auth.onAuthStateChanged((authUser) => {
 			if (authUser) {
 				// User is signed in
-				console.log(authUser);
 				setUser(authUser);
 
 				// Profile update and display Username
@@ -88,7 +88,7 @@ function App() {
 	}, []);
 
 	/**
-	 * Sign Up
+	 * * Sign up user with email and password on firebase
 	 * @param {*} e
 	 */
 	const signUp = (e) => {
@@ -106,7 +106,7 @@ function App() {
 	};
 
 	/**
-	 * Sign In
+	 * * Sign In user with registerd email and password on firebase
 	 * @param {*} e
 	 */
 	const signIn = (e) => {
@@ -122,6 +122,13 @@ function App() {
 
 	return (
 		<div className='App'>
+			{user?.displayName ? (
+				<ImageUpload username={user.displayName} />
+			) : (
+				<h3>Sorry you need to login to upload</h3>
+			)}
+
+			{/* Sign In, Sign Up, Logout */}
 			<Modal open={open} onClose={() => setOpen(false)}>
 				<div style={modalStyle} className={classes.paper}>
 					<center>
@@ -204,6 +211,8 @@ function App() {
 					</center>
 				</div>
 			</Modal>
+
+			{/* App Header */}
 			<div className='app__header'>
 				<img
 					src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'
@@ -212,6 +221,7 @@ function App() {
 				/>
 			</div>
 
+			{/* User Authentication */}
 			{user ? (
 				<Button onClick={() => auth.signOut()}>Logout</Button>
 			) : (
@@ -221,6 +231,7 @@ function App() {
 				</div>
 			)}
 
+			{/* Posts */}
 			{posts.map(({ id, post }) => (
 				<Post
 					key={id}
