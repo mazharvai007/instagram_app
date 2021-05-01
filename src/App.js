@@ -76,15 +76,17 @@ function App() {
 	 * Posts
 	 */
 	useEffect(() => {
-		db.collection('posts').onSnapshot((snapshot) => {
-			// Added new post everytime when the is fire
-			setPosts(
-				snapshot.docs.map((doc) => ({
-					id: doc.id,
-					post: doc.data(),
-				}))
-			);
-		});
+		db.collection('posts')
+			.orderBy('timestamp', 'desc')
+			.onSnapshot((snapshot) => {
+				// Added new post everytime when the is fire
+				setPosts(
+					snapshot.docs.map((doc) => ({
+						id: doc.id,
+						post: doc.data(),
+					}))
+				);
+			});
 	}, []);
 
 	/**
@@ -122,12 +124,6 @@ function App() {
 
 	return (
 		<div className='App'>
-			{user?.displayName ? (
-				<ImageUpload username={user.displayName} />
-			) : (
-				<h3>Sorry you need to login to upload</h3>
-			)}
-
 			{/* Sign In, Sign Up, Logout */}
 			<Modal open={open} onClose={() => setOpen(false)}>
 				<div style={modalStyle} className={classes.paper}>
@@ -214,22 +210,25 @@ function App() {
 
 			{/* App Header */}
 			<div className='app__header'>
-				<img
-					src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'
-					alt=''
-					className='app__headerImage'
-				/>
+				<a href='/'>
+					<img
+						src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'
+						alt=''
+						className='app__headerImage'
+					/>
+				</a>
+				{/* User Authentication */}
+				{user ? (
+					<Button onClick={() => auth.signOut()}>Logout</Button>
+				) : (
+					<div className='app__loginContainer'>
+						<Button onClick={() => setOpenSignIn(true)}>
+							Sign In
+						</Button>
+						<Button onClick={() => setOpen(true)}>Sign Up</Button>
+					</div>
+				)}
 			</div>
-
-			{/* User Authentication */}
-			{user ? (
-				<Button onClick={() => auth.signOut()}>Logout</Button>
-			) : (
-				<div className='app__loginContainer'>
-					<Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-					<Button onClick={() => setOpen(true)}>Sign Up</Button>
-				</div>
-			)}
 
 			{/* Posts */}
 			{posts.map(({ id, post }) => (
@@ -242,6 +241,12 @@ function App() {
 			))}
 
 			{/* right content */}
+
+			{user?.displayName ? (
+				<ImageUpload username={user.displayName} />
+			) : (
+				<h3>Sorry you need to login to upload</h3>
+			)}
 		</div>
 	);
 }

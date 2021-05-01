@@ -1,0 +1,14 @@
+.imageUpload {
+	display: flex;
+	flex-direction: column;
+	width: 60%;
+	margin: 10px auto;
+	background-color: white;
+	border-top: 1px soid lightgray;
+}
+.imageUpload__progress {
+	width: 100%;
+}
+.imageUpload__caption {}
+.imageUpload__file {}
+.imageUpload__button {}
