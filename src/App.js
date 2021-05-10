@@ -6,6 +6,7 @@ import Post from './Components/Post/Post';
 import { db, auth } from './firebase';
 import { Button, FormControl, Input } from '@material-ui/core';
 import ImageUpload from './Components/ImageUpload/ImageUpload';
+import InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle() {
 	const top = 50;
@@ -217,6 +218,7 @@ function App() {
 						className='app__headerImage'
 					/>
 				</a>
+
 				{/* User Authentication */}
 				{user ? (
 					<Button onClick={() => auth.signOut()}>Logout</Button>
@@ -231,22 +233,42 @@ function App() {
 			</div>
 
 			{/* Posts */}
-			{posts.map(({ id, post }) => (
-				<Post
-					key={id}
-					username={post.username}
-					caption={post.caption}
-					imageURL={post.imageURL}
-				/>
-			))}
+			<div className='app__posts'>
+				<div className='app__postLeft'>
+					{posts.map(({ id, post }) => (
+						<Post
+							key={id}
+							username={post.username}
+							caption={post.caption}
+							imageURL={post.imageURL}
+						/>
+					))}
+				</div>
 
-			{/* right content */}
+				<div className='app__postRight'>
+					<InstagramEmbed
+						url='https://www.instagram.com/p/COp_iGQBsgM/'
+						clientAccessToken='409645280387896|f907d6aeb239198ecb31030b649d3717'
+						maxWidth={320}
+						hideCaption={false}
+						containerTagName='div'
+						protocol=''
+						injectScript
+						onLoading={() => {}}
+						onSuccess={() => {}}
+						onAfterRender={() => {}}
+						onFailure={() => {}}
+					/>
+				</div>
+			</div>
 
-			{user?.displayName ? (
-				<ImageUpload username={user.displayName} />
-			) : (
-				<h3>Sorry you need to login to upload</h3>
-			)}
+			<div className='app__imageUpload'>
+				{user?.displayName ? (
+					<ImageUpload username={user.displayName} />
+				) : (
+					<h3>Sorry you need to login to upload</h3>
+				)}
+			</div>
 		</div>
 	);
 }

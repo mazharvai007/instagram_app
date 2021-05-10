@@ -3,7 +3,6 @@
 }
 .App {
 	background-color: #fafafa;
-	height: 100vh;
 }
 .app__header {
 	background-color: white;
@@ -11,12 +10,28 @@
 	border-bottom: 1px solid lightgray;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 20px;
 }
 .app__headerImage {
 	object-fit: contain;
+	max-width: 120px;
+}
+.app__posts {
+	padding: 20px;
+	display: flex;
+	justify-content: center;
 }
 .app__signup,
 .app__signin {
 	display: flex;
 	flex-direction: column;
 }
+.app__imageUpload h3 {
+	text-align: center;
+}
+.app__postLeft {
+	max-width: 614px;
+	width: 100%;
+	margin-right: 28px;
+}
+.app__postRight {}
