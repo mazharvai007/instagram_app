@@ -21,3 +21,29 @@
 	font-weight: normal;
 	padding: 20px;
 }
+.post__comments {
+	padding: 0 20px;
+}
+.post__commentBox {
+	display: flex;
+	margin-top: 10px;
+}
+.post__input {
+	flex: 1;
+	border: none;
+	padding: 10px;
+	border-radius: 0;
+	border-top: 1px solid lightgray;
+}
+.post__input:focus-visible {
+	outline: 0;
+}
+.post__button {
+	flex: 0;
+	border: none;
+	color: #6082a3;
+	font-weight: 600;
+	border-radius: 0;
+	background-color: transparent;
+	border-top: 1px solid lightgray;
+}
